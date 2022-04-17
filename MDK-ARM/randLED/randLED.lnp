@@ -1,0 +1,23 @@
+--cpu Cortex-M3
+"randled\startup_stm32f103x6.o"
+"randled\main.o"
+"randled\stm32f1xx_it.o"
+"randled\stm32f1xx_hal_msp.o"
+"randled\stm32f1xx_hal_gpio_ex.o"
+"randled\stm32f1xx_hal_tim.o"
+"randled\stm32f1xx_hal_tim_ex.o"
+"randled\stm32f1xx_hal.o"
+"randled\stm32f1xx_hal_rcc.o"
+"randled\stm32f1xx_hal_rcc_ex.o"
+"randled\stm32f1xx_hal_gpio.o"
+"randled\stm32f1xx_hal_dma.o"
+"randled\stm32f1xx_hal_cortex.o"
+"randled\stm32f1xx_hal_pwr.o"
+"randled\stm32f1xx_hal_flash.o"
+"randled\stm32f1xx_hal_flash_ex.o"
+"randled\stm32f1xx_hal_exti.o"
+"randled\system_stm32f1xx.o"
+--strict --scatter "randLED\randLED.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "randLED.map" -o randLED\randLED.axf
