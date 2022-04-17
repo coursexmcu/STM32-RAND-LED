@@ -74,7 +74,9 @@ TIM_HandleTypeDef htim1;
 
 // LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
 LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
-int mode[] = {1,3,4,6,7,8,9};
+int lightmodelist[3][8]={{1,9,4,5,6,7,1,2},{1,2,2,6,3,9,2,7},{4,5,6,2,8,6,4,5}};
+int lightmodeindex = 0;
+// int mode[] = {1,3,4,6,7,8,9};
 int modeindex = 0;
 int i=0;
 /* USER CODE END PV */
@@ -268,8 +270,8 @@ static void MX_GPIO_Init(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if(htim==&htim1){
 		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_SET);
-		modeindex = (modeindex+1)%(sizeof(mode)/sizeof(mode[0]));
-		i = mode[modeindex]-1;
+		modeindex = (modeindex+1)%(sizeof(lightmodelist[lightmodeindex])/sizeof(lightmodelist[lightmodeindex][0]));
+		i = lightmodelist[lightmodeindex][modeindex]-1;
 		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_RESET);
 	}
 }
