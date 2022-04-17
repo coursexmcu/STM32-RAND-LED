@@ -40,7 +40,14 @@ typedef struct
 /* USER CODE BEGIN PD */
 #define led1 {LED1_GPIO_Port,LED1_Pin}
 #define led2 {LED2_GPIO_Port,LED2_Pin}
-#define LIGHT_TIME 300
+#define led3  {LED3_GPIO_Port,LED3_Pin}
+#define led4  {LED4_GPIO_Port,LED4_Pin}
+#define led5  {LED5_GPIO_Port,LED5_Pin}
+#define led6  {LED6_GPIO_Port,LED6_Pin}
+#define led7  {LED7_GPIO_Port,LED7_Pin}
+#define led8  {LED8_GPIO_Port,LED8_Pin}
+#define led9  {LED9_GPIO_Port,LED9_Pin}
+#define LIGHT_TIME 700
 
 
 /* USER CODE END PD */
@@ -51,24 +58,29 @@ typedef struct
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+TIM_HandleTypeDef htim1;
 
 /* USER CODE BEGIN PV */
 //LED led1 = {LED1_GPIO_Port,LED1_Pin};
 //LED led2 = {LED2_GPIO_Port,LED2_Pin};
-LED led3 = {LED3_GPIO_Port,LED3_Pin};
-LED led4 = {LED4_GPIO_Port,LED4_Pin};
-LED led5 = {LED5_GPIO_Port,LED5_Pin};
-LED led6 = {LED6_GPIO_Port,LED6_Pin};
-LED led7 = {LED7_GPIO_Port,LED7_Pin};
-LED led8 = {LED8_GPIO_Port,LED8_Pin};
-LED led9 = {LED9_GPIO_Port,LED9_Pin};
+// LED led3 = {LED3_GPIO_Port,LED3_Pin};
+// LED led4 = {LED4_GPIO_Port,LED4_Pin};
+// LED led5 = {LED5_GPIO_Port,LED5_Pin};
+// LED led6 = {LED6_GPIO_Port,LED6_Pin};
+// LED led7 = {LED7_GPIO_Port,LED7_Pin};
+// LED led8 = {LED8_GPIO_Port,LED8_Pin};
+//LED led9 = {LED9_GPIO_Port,LED9_Pin};
+// int lightmodelist[3][8]={{1,9,4,5,6,7,1,2},{1,2,2,6,3,9,2,7},{4,5,6,2,8,6,4,5}};
 
 // LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
+LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
+int i;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_TIM1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -106,20 +118,22 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
+	HAL_TIM_Base_Start_IT(&htim1);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-	LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
-	int i = rand()%(sizeof(ledlist)/sizeof(ledlist[0]));
+
+	i = rand()%(sizeof(ledlist)/sizeof(ledlist[0]));
   while (1)
   {
-		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_RESET);
-		HAL_Delay(LIGHT_TIME);
-		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_SET);
-		i = rand()%(sizeof(ledlist)/sizeof(ledlist[0]));
+		// HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_RESET);
+		// HAL_Delay(LIGHT_TIME);
+		// HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_SET);
+		// i = rand()%(sizeof(ledlist)/sizeof(ledlist[0]));
 		
 		
     /* USER CODE END WHILE */
@@ -165,6 +179,52 @@ void SystemClock_Config(void)
 }
 
 /**
+  * @brief TIM1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM1_Init(void)
+{
+
+  /* USER CODE BEGIN TIM1_Init 0 */
+
+  /* USER CODE END TIM1_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM1_Init 1 */
+
+  /* USER CODE END TIM1_Init 1 */
+  htim1.Instance = TIM1;
+  htim1.Init.Prescaler = 8000000/1000+1;
+  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim1.Init.Period = LIGHT_TIME;
+  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim1.Init.RepetitionCounter = 0;
+  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM1_Init 2 */
+
+  /* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -203,6 +263,13 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+	if(htim==&htim1){
+		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_SET);
+		i = rand()%(sizeof(ledlist)/sizeof(ledlist[0]));
+		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_RESET);
+	}
+}
 
 /* USER CODE END 4 */
 
