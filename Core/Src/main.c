@@ -40,6 +40,7 @@ typedef struct
 /* USER CODE BEGIN PD */
 #define led1 {LED1_GPIO_Port,LED1_Pin}
 #define led2 {LED2_GPIO_Port,LED2_Pin}
+#define LIGHT_TIME 300
 
 
 /* USER CODE END PD */
