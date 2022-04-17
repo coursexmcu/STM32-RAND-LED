@@ -2,9 +2,9 @@
 .mxproject
 
 ## MDK-ARM
-*/MDK-ARM/*.htm
-*/MDK-ARM/*.lsp
-*/MDK-ARM/*.dep
+*.htm
+*.lsp
+*.dep
 
 # Prerequisites
 *.d
