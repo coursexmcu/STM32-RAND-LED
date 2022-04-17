@@ -27,11 +27,19 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
+typedef struct
+{
+	GPIO_TypeDef *Port;
+  uint32_t Pin;       /*!< Specifies the GPIO pins to be configured.
+                           This parameter can be any value of @ref GPIO_pins_define */
+}LED;
 
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define led1 {LED1_GPIO_Port,LED1_Pin}
+#define led2 {LED2_GPIO_Port,LED2_Pin}
 
 
 /* USER CODE END PD */
@@ -44,7 +52,17 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint16_t ledlist[] = {LED1_Pin, LED2_Pin,LED3_Pin,LED4_Pin,LED5_Pin,LED6_Pin,LED7_Pin,LED8_Pin};
+//LED led1 = {LED1_GPIO_Port,LED1_Pin};
+//LED led2 = {LED2_GPIO_Port,LED2_Pin};
+LED led3 = {LED3_GPIO_Port,LED3_Pin};
+LED led4 = {LED4_GPIO_Port,LED4_Pin};
+LED led5 = {LED5_GPIO_Port,LED5_Pin};
+LED led6 = {LED6_GPIO_Port,LED6_Pin};
+LED led7 = {LED7_GPIO_Port,LED7_Pin};
+LED led8 = {LED8_GPIO_Port,LED8_Pin};
+LED led9 = {LED9_GPIO_Port,LED9_Pin};
+
+// LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,12 +111,16 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+	LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
+	int i = rand()%9;
   while (1)
   {
-		int i = rand()%8;
-		HAL_GPIO_WritePin(LED1_GPIO_Port, GPIO_PIN_All, GPIO_PIN_SET);
-		HAL_GPIO_WritePin(LED1_GPIO_Port, ledlist[i], GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_RESET);
 		HAL_Delay(1000);
+		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_SET);
+		i = rand()%9;
+		
+		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
