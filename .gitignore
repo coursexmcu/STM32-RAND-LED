@@ -5,6 +5,11 @@
 *.htm
 *.lsp
 *.dep
+*.crf
+*/*.htm
+*/*.lsp
+*/*.dep
+
 
 # Prerequisites
 *.d
@@ -58,3 +63,5 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+MDK-ARM/randLED/randLED.htm
+MDK-ARM/randLED/randLED.build_log.htm
