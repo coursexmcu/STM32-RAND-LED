@@ -113,13 +113,13 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	LED ledlist[] = {led1,led2,led3,led4,led5,led6,led7,led8,led9};
-	int i = rand()%9;
+	int i = rand()%(sizeof(ledlist)/sizeof(ledlist[0]));
   while (1)
   {
 		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_RESET);
-		HAL_Delay(1000);
+		HAL_Delay(LIGHT_TIME);
 		HAL_GPIO_WritePin(ledlist[i].Port, ledlist[i].Pin, GPIO_PIN_SET);
-		i = rand()%9;
+		i = rand()%(sizeof(ledlist)/sizeof(ledlist[0]));
 		
 		
     /* USER CODE END WHILE */
